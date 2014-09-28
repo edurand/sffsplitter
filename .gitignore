@@ -1,0 +1,5 @@
+*.o
+*.swp
+*.swo
+*.sff
+sff_splitter
