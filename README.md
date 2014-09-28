@@ -1,39 +1,43 @@
 SYNOPSIS
 ========
 
-The program `sff2fastq` extracts read information from a SFF file,
-produced by the 454 genome sequencer, and outputs the sequences and
-quality scores in a FASTQ format.
+sff_splitter is a fast, OpenMP multithreaded, SFF demultiplexer written in C++.  
+Given a list of adaptor sequences and a SFF file, sff_splitter extracts read information from the file and split the reads by the adaptor sequence they match. It outputs its results in adaptor-specific SFF files. 
+
+sff_splitter allows for imperfect matching between reads and adaptor sequences. The degree of mismatch is controlled by the user.
+
+sff_splitter does not require that all adaptor sequences have the same length. 
 
 USAGE
 =====
 
-Given an SFF file, `file.sff` you can simply run:
+Given an SFF file, `file.sff`, and a tab-separated list of adaptors (see below) `adaptors.txt`, you can simply run:
 
-    sff2fastq file.sff
+    sff_splitter -i file.sff -a adaptors.txt -o output_stem 
 
-`sff2fastq` will also read from standard input if a SFF file is not specified on the command line.  For example, you can do the following:
+This will produce files named `output_stem.adaptor_name.sff` (one per matched adaptor) and an additional file named `output_stem.unmatched.sff`. 
+The unmatched file contains reads that could not be mapped to any adaptor sequence. 
 
-    cat file.sff | sff2fastq > file.fastq
+REQUIREMENTS
+============
+sff_splitter requires gcc version >= 4.7 and the openmp library. 
 
-This is useful if you have a compressed sff file and you'd like to avoid
-creating temporary files like so:
+OPTIONS
+=======
 
-    zcat file.sff.gz | sff2fastq > file.fastq
+Below is the help message (via `sff_splitter -h`) describing its usage & options:
 
-_(This feature has been kindly added by [Björn Winckler](https://github.com/b4winckler) )_
-
-Options
--------
-
-Below is the help message (via `sff2fastq -h`) describing its usage & options:
-
-    Usage: sff2fastq [options] [sff_file]
-            -h                  This help message   
-            -v                  Program and version information
-            -n                  Output the untrimmed sequence
-            -o <fastq_file>     Desired fastq output file. If not specified, 
-                                defaults to stdout
+Usage: sff_splitter [arguments]
+	Required arguments:
+		-i <input.sff>      Input file to split.
+		-a <adaptors.txt>   Adaptors used to split input file. Format: <name>	<sequence>.
+		-o <output_stem>    Stem for output file. Output will be stored as '<output_stem>.adaptor.sff'
+	Optional arguments:
+		-h                  This help message
+		-v                  verbose
+		-m <VALUE>          Maximum number of mismatches between adaptor and read. Default: 0
+		-t <VALUE>          Number of threads    Default: 1
+		-b <VALUE>          Read buffer size     Default: 100
 
 
 INSTALLATION
@@ -43,51 +47,26 @@ The installation process currently consists of a very simple Makefile.
 
 Just do the following:
 
-    git clone git://github.com/indraniel/sff2fastq.git;
-    cd sff2fastq;
-    make; # try 'make genome' if at the Genome Center at Washington University
-          # or on a Linux distribution from 2008 or earlier
+    git clone https://github.com/edurand/sffsplitter
+    cd sffsplitter
+    make 
 
-The `sff2fastq` executable should be in the working directory.
-Afterwards, you can move the executable to wherever you wish.
-
-NOTES
-=====
-
-This has been successfully compiled on Linux/Ubuntu 8.04 & 9.10
-workstations (both 32-bit and 64-bit machines), and on Mac OS X (version
-10.5).  Compiling on other types of operating systems and architectures
-has not been experimented upon.
-
-The FASTQ output produced is of the Sanger FASTQ format as described
-here (http://maq.sourceforge.net/fastq.shtml).
-
-Without any given options the default approach is to output trimmed
-sequence and quality values.  This is similar in nature to the sff tools
-produced by 454 Life Sciences/Roche.
 
 AUTHORS
 =======
 
-Indraniel Das (indraniel@gmail.com or idas@wustl.edu)
-The Genome Institute at Washington University
-
-Contributors
-------------
-
-* [Björn Winckler](https://github.com/b4winckler)
-* [James Casbon](https://github.com/jamescasbon)
+Eric Y. Durand (durand.ey@gmail.com)
 
 ACKNOWLEDGEMENTS
 ================
 
-This software was developed at The Genome Institute at Washington
-University, St. Louis, MO.
+The Big-Endian conversion routine headers have been taken from sff2fastq, developped by Indraniel Das. 
+The structure of the SFF reader has also been inspired by sff2fastq. 
+https://github.com/indraniel/sff2fastq/
+
+
 
 DISCLAIMER
 ==========
-
 This software is provided "as is" without warranty of any kind.
 
-
-March 23, 2010
