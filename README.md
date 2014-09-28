@@ -27,17 +27,17 @@ OPTIONS
 
 Below is the help message (via `sff_splitter -h`) describing its usage & options:
 
-Usage: sff_splitter [arguments]
-	Required arguments:
-		-i <input.sff>      Input file to split.
-		-a <adaptors.txt>   Adaptors used to split input file. Format: <name>	<sequence>.
-		-o <output_stem>    Stem for output file. Output will be stored as '<output_stem>.adaptor.sff'
-	Optional arguments:
-		-h                  This help message
-		-v                  verbose
-		-m <VALUE>          Maximum number of mismatches between adaptor and read. Default: 0
-		-t <VALUE>          Number of threads    Default: 1
-		-b <VALUE>          Read buffer size     Default: 100
+    Usage: sff_splitter [arguments]
+        Required arguments:
+            -i <input.sff>      Input file to split.
+            -a <adaptors.txt>   Adaptors used to split input file. Format: <name>	<sequence>.
+            -o <output_stem>    Stem for output file. Output will be stored as '<output_stem>.adaptor.sff'
+        Optional arguments:
+            -h                  This help message
+            -v                  verbose
+            -m <VALUE>          Maximum number of mismatches between adaptor and read. Default: 0
+            -t <VALUE>          Number of threads    Default: 1
+            -b <VALUE>          Read buffer size     Default: 100
 
 
 INSTALLATION
